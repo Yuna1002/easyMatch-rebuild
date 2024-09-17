@@ -1,19 +1,8 @@
-<script setup>
-// import { RouterLink, RouterView } from 'vue-router';
-</script>
+<script setup></script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <nav>
-        <button class="btn btn-primary">測試</button>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
   <RouterView />
+  <button class="btn btn-primary">送出</button>
 </template>
 
 <style scoped></style>
