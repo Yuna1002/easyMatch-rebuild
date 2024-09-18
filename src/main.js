@@ -14,7 +14,7 @@ import '../src/assets/scss/style.scss';
 
 // or, specify which plugins you need:
 // import { Tooltip, Toast, Popover } from 'bootstrap';
-import { Modal } from 'bootstrap';
+// import { Modal } from 'bootstrap';
 
 const app = createApp(App);
 
