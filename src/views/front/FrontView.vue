@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <div class="bg-secondary">
+  <div class="bg-secondary vh-100">
     <header>
       <nav>
         <router-link to="/">首頁</router-link>
@@ -15,8 +15,4 @@
   </div>
 </template>
 
-<style scoped>
-main {
-  height: 100vh;
-}
-</style>
+<style scoped></style>
