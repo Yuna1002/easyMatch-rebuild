@@ -14,6 +14,9 @@ const signIn = async () => {
   try {
     const res = await axios.post(`${VITE_APP_URL}/admin/signin`, data);
     console.log(res.data);
+    // 取出token、expired到期日 儲存在cookie
+    const { token, expired } = res.data;
+    document.cookie = `yunaToken=${token}; expires=${new Date(expired)}`;
   } catch (err) {
     console.error(err.response.data.message);
   }
