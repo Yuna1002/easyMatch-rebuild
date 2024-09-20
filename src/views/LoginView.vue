@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import axios from 'axios';
+import { useRouter } from 'vue-router';
 const { VITE_APP_URL } = import.meta.env;
+const router = useRouter();
 const user = ref({
   username: '',
   password: ''
@@ -13,10 +15,10 @@ const signIn = async () => {
   };
   try {
     const res = await axios.post(`${VITE_APP_URL}/admin/signin`, data);
-    console.log(res.data);
     // 取出token、expired到期日 儲存在cookie
     const { token, expired } = res.data;
     document.cookie = `yunaToken=${token}; expires=${new Date(expired)}`;
+    router.push('/admin/products');
   } catch (err) {
     console.error(err.response.data.message);
   }
