@@ -1,14 +1,18 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+
 const { VITE_APP_URL } = import.meta.env;
 const router = useRouter();
 const user = ref({
   username: '',
   password: ''
 });
+const isloading = ref(false);
+
 const signIn = async () => {
+  isloading.value = true;
   const data = {
     username: user.value.username,
     password: user.value.password
@@ -20,7 +24,8 @@ const signIn = async () => {
     document.cookie = `yunaToken=${token}; expires=${new Date(expired)}`;
     router.push('/admin/products');
   } catch (err) {
-    console.error(err.response.data.message);
+    alert(err.response.data.message);
+    isloading.value = false;
   }
 };
 </script>
@@ -38,7 +43,16 @@ const signIn = async () => {
         <input type="password" class="form-control border-0" id="password" placeholder="Password" v-model="user.password" />
         <label for="password" class="text-light-emphasis">Password</label>
       </div>
-      <button type="submit" class="btn btn-primary text-white rounded-pill py-2 mb-3" style="font-family: 'Josefin Sans'">SIGN IN</button>
+      <button
+        type="submit"
+        class="btn btn-primary text-white rounded-pill py-2 mb-3 d-flex align-items-center justify-content-center"
+        style="font-family: 'Josefin Sans'"
+      >
+        <span class="me-1">SIGN IN</span>
+        <div class="spinner-border" style="width: 1rem; height: 1rem" role="status" v-if="isloading">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </button>
       <router-link to="/" class="fs-3">返回首頁</router-link>
     </form>
   </main>
@@ -51,7 +65,7 @@ main {
 input {
   min-width: 280px;
 }
-button {
+form button {
   min-width: 180px;
 }
 </style>
