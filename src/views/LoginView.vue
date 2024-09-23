@@ -1,38 +1,27 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useLoginStore } from '@/stores/login.js';
 
-const { VITE_APP_URL } = import.meta.env;
 const router = useRouter();
+const store = useLoginStore();
+
 const user = ref({
   username: '',
   password: ''
 });
-const isloading = ref(false);
 
-const signIn = async () => {
-  isloading.value = true;
-  const data = {
-    username: user.value.username,
-    password: user.value.password
-  };
-  try {
-    const res = await axios.post(`${VITE_APP_URL}/admin/signin`, data);
-    // 取出token、expired到期日 儲存在cookie
-    const { token, expired } = res.data;
-    document.cookie = `yunaToken=${token}; expires=${new Date(expired)}`;
+const handleLogin = async () => {
+  const success = await store.signIn(user.value);
+  if (success) {
     router.push('/admin/products');
-  } catch (err) {
-    alert(err.response.data.message);
-    isloading.value = false;
   }
 };
 </script>
 
 <template>
   <main class="bg-gradient d-flex justify-content-center align-items-center">
-    <form class="bg-light px-22 py-15 rounded-3 shadow d-flex flex-column align-items-center" @submit.prevent="signIn">
+    <form class="bg-light px-22 py-15 rounded-3 shadow d-flex flex-column align-items-center" @submit.prevent="handleLogin">
       <img src="../assets/images/pill_signIn.webp" class="mb-6" alt="logo圖示" width="72" height="72" />
       <h1 class="fs-9 mb-17" style="font-family: 'Josefin Sans'">SIGN IN</h1>
       <div class="form-floating mb-5">
@@ -49,7 +38,7 @@ const signIn = async () => {
         style="font-family: 'Josefin Sans'"
       >
         <span class="me-1">SIGN IN</span>
-        <div class="spinner-border" style="width: 1rem; height: 1rem" role="status" v-if="isloading">
+        <div class="spinner-border" style="width: 1rem; height: 1rem" role="status" v-if="store.isloading">
           <span class="visually-hidden">Loading...</span>
         </div>
       </button>
