@@ -23,7 +23,7 @@ handleCheckLogIn();
 
 <template>
   <div>
-    <header class="container">
+    <header class="container-lg">
       <div class="d-flex align-items-center">
         <h1 class="me-5 flex-shrink-0">後台</h1>
         <nav class="d-flex align-items-center w-100">
@@ -39,7 +39,7 @@ handleCheckLogIn();
       </div>
     </header>
     <hr />
-    <main class="container">
+    <main class="container-lg">
       <router-view />
     </main>
   </div>

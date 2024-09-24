@@ -1,11 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+
 @import 'bootstrap/scss/functions';
 @import './variables';
-@import 'bootstrap/scss/variables-dark';
-@import 'bootstrap/scss/maps';
-@import 'bootstrap/scss/mixins';
-@import 'bootstrap/scss/root';
-
+// @import 'bootstrap/scss/variables-dark';
+// @import 'bootstrap/scss/maps';
+// @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/bootstrap'; //導入所有 Bootstrap 的 CSS
 
+
+
 @import './base';
+@import './utilities'
