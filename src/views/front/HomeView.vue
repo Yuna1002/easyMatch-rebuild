@@ -1,12 +1,15 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '@/stores/login.js';
+import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const store = useLoginStore();
+const { isloading }= storeToRefs(store);
+const { checkLogIn } =store;
 
 const handleCheckLogIn = async () => {
-  const success = await store.checkLogIn();
+  const success = await checkLogIn();
   if (success) {
     router.push('/admin/products');
   } else {
@@ -21,7 +24,7 @@ const handleCheckLogIn = async () => {
 
     <button type="button" class="btn btn-primary text-white" @click.prevent="handleCheckLogIn">
       <span class="me-1">登入後台</span>
-      <div class="spinner-border" style="width: 1rem; height: 1rem" role="status" v-if="store.isloading">
+      <div class="spinner-border" style="width: 1rem; height: 1rem" role="status" v-if="isloading">
         <span class="visually-hidden">Loading...</span>
       </div>
     </button>

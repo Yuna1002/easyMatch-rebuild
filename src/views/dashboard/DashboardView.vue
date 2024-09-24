@@ -1,21 +1,14 @@
 <script setup>
-import axios from 'axios';
 import { useRouter } from 'vue-router';
-const { VITE_APP_URL } = import.meta.env;
-const router = useRouter();
+import { useLoginStore } from '@/stores/login';
 
-//登入驗證
-const checkLogIn = async () => {
-  //從cookie裡取得token
-  const token = document.cookie.replace(/(?:(?:^|.*;\s*)yunaToken\s*=\s*([^;]*).*$)|^.*$/, '$1');
-  //將token放置hearders
-  axios.defaults.headers.common['Authorization'] = token;
-  try {
-    await axios.post(`${VITE_APP_URL}/api/user/check`);
-  } catch (err) {
-    alert(err.response.data.message);
-    router.push('/login');
-  }
+const router = useRouter();
+const store=useLoginStore()
+const { checkLogIn } =store
+
+const handleCheckLogIn = async () => {
+  const success = await checkLogIn();
+  if(!success) router.push('/login');
 };
 
 //登出
@@ -25,7 +18,7 @@ const signout = () => {
   router.push('/');
 };
 
-checkLogIn();
+handleCheckLogIn();
 </script>
 
 <template>

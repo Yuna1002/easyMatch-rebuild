@@ -36,6 +36,7 @@ export const useLoginStore = defineStore('login', () => {
     } catch (err) {
       isloading.value = false;
       console.error(err);
+      return false
     }
   };
 

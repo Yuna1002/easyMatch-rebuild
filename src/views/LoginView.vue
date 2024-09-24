@@ -2,9 +2,12 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '@/stores/login.js';
+import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const store = useLoginStore();
+const { isloading } = storeToRefs(store);
+const { signIn } = store;
 
 const user = ref({
   username: '',
@@ -12,7 +15,7 @@ const user = ref({
 });
 
 const handleLogin = async () => {
-  const success = await store.signIn(user.value);
+  const success = await signIn(user.value);
   if (success) {
     router.push('/admin/products');
   }
@@ -38,7 +41,7 @@ const handleLogin = async () => {
         style="font-family: 'Josefin Sans'"
       >
         <span class="me-1">SIGN IN</span>
-        <div class="spinner-border" style="width: 1rem; height: 1rem" role="status" v-if="store.isloading">
+        <div class="spinner-border" style="width: 1rem; height: 1rem" role="status" v-if="isloading">
           <span class="visually-hidden">Loading...</span>
         </div>
       </button>
