@@ -28,7 +28,7 @@ const handleLogin = async () => {
       <img src="../assets/images/pill_signIn.webp" class="mb-6" alt="logo圖示" width="72" height="72" />
       <h1 class="fs-9 mb-17" style="font-family: 'Josefin Sans'">SIGN IN</h1>
       <div class="form-floating mb-5">
-        <input type="email" class="form-control border-0" id="email" placeholder="E-mail" v-model="user.username" />
+        <input type="email" class="form-control border-0" id="email" placeholder="E-mail" v-model="user.username" v-focus />
         <label for="email" class="text-light-emphasis">E-mail</label>
       </div>
       <div class="form-floating mb-17">

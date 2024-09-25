@@ -3,12 +3,12 @@ import { useRouter } from 'vue-router';
 import { useLoginStore } from '@/stores/login';
 
 const router = useRouter();
-const store=useLoginStore()
-const { checkLogIn } =store
+const store = useLoginStore();
+const { checkLogIn } = store;
 
 const handleCheckLogIn = async () => {
   const success = await checkLogIn();
-  if(!success) router.push('/login');
+  if (!success) router.push('/login');
 };
 
 //登出

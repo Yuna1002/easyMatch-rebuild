@@ -1,124 +1,33 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import productModal from '@/components/dashboard/productModal.vue';
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
-const products=ref([])
+const products = ref([]);
+const modal = ref(null);
 
 //取得所有產品
-const getProducts= async()=>{
-  try{
-    const res=await axios.get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/products`)
-    products.value=res.data.products
-  }catch(err){
-    console.log('api',err)
-  } 
-}
+const getProducts = async () => {
+  try {
+    const res = await axios.get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/products`);
+    products.value = res.data.products;
+  } catch (err) {
+    console.log('api', err);
+  }
+};
+const openModal = () => {
+  modal.value.show();
+};
 
-onMounted(()=>{
-  getProducts()
-})
-
-// import ProductModal from "../../components/ProductModal.vue";
-// import DelModal from "../../components/DelModal.vue";
-// import PaginationCpmponent from "../../components/PaginationCpmponent.vue";
-// const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
-// export default {
-//   data() {
-//     return {
-//       products: [],
-//       isNew: true, //判斷modal裡的確認鍵是新增/編輯
-//       editItem: {},
-//       pages: {},
-//     };
-//   },
-//   components: {
-//     ProductModal,
-//     DelModal,
-//     PaginationCpmponent,
-//   },
-//   methods: {
-//     getProducts(page = 1) {
-//       //page=1 預設第一頁
-//       this.$http
-//         .get(
-//           `${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/products/?page=${page}`
-//         )
-//         .then((res) => {
-//           this.products = res.data.products;
-//           this.pages = res.data.pagination;
-//         })
-//         .catch((err) => {
-//           alert(err.data.message);
-//         });
-//     },
-//     openModal(state, item) {
-//       if (state === "new") {
-//         this.editItem = {};
-//         this.isNew = true;
-//         this.$refs.productModal.show(); //$refs 外層取用內層方法
-//       } else if (state === "edit") {
-//         this.editItem = { ...item };
-//         this.isNew = false;
-//         this.$refs.productModal.show();
-//       } else if (state === "del") {
-//         this.editItem = { ...item };
-//         this.$refs.delProductModal.show();
-//       }
-//     },
-//     addProduct(tempProduct) {
-//       const data = tempProduct;
-//       this.$http
-//         .post(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product`, { data })
-//         .then((res) => {
-//           alert(res.data.message);
-//           this.$refs.productModal.hide();
-//           this.getProducts();
-//         })
-//         .catch((err) => {
-//           console.log(err.data.message);
-//         });
-//     },
-//     editProduct(id, tempProduct) {
-//       const data = tempProduct;
-//       this.$http
-//         .put(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product/${id}`, {
-//           data,
-//         })
-//         .then((res) => {
-//           alert(res.data.message);
-//           this.$refs.productModal.hide();
-//           this.getProducts();
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//         });
-//     },
-//     delProduct(id) {
-//       this.$http
-//         .delete(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product/${id}`)
-//         .then((res) => {
-//           alert(res.data.message);
-//           this.$refs.delProductModal.hide();
-//           this.getProducts();
-//         })
-//         .catch((err) => {
-//           console.log(err);
-//         });
-//     },
-//   },
-//   mounted() {
-//     this.getProducts();
-//   },
-// };
+onMounted(() => {
+  getProducts();
+});
 </script>
 
 <template>
   <div class="text-end mt-4">
-    <!-- @click="openModal('new')" -->
-    <button class="btn btn-primary text-white" >
-      建立新的產品
-    </button>
+    <button class="btn btn-primary text-white" @click="openModal">建立新的產品</button>
   </div>
   <table class="table mt-4">
     <thead>
@@ -143,19 +52,12 @@ onMounted(()=>{
         </td>
         <td>
           <div class="btn-group">
-            <button
-              type="button"
-              class="btn btn-outline-primary btn-sm"
-            >
-            <!-- @click="openModal('edit', product)" -->
+            <button type="button" class="btn btn-outline-primary btn-sm">
+              <!-- @click="openModal('edit', product)" -->
               編輯
             </button>
-            <button
-              type="button"
-              class="btn btn-outline-danger btn-sm"
-              
-            >
-            <!-- @click="openModal('del', product)" -->
+            <button type="button" class="btn btn-outline-danger btn-sm">
+              <!-- @click="openModal('del', product)" -->
               刪除
             </button>
           </div>
@@ -163,15 +65,10 @@ onMounted(()=>{
       </tr>
     </tbody>
   </table>
-  <!-- <ProductModal
-    ref="productModal"
-    :is-new="isNew"
-    :edit-item="editItem"
-    @add-product="addProduct"
-    @edit-product="editProduct"
-  ></ProductModal>
-  <DelModal ref="delProductModal" :temp="editItem" @del="delProduct"></DelModal>
-  <PaginationCpmponent
+  <productModal ref="modal"></productModal>
+  <!-- <ProductModal ref="productModal" :is-new="isNew" :edit-item="editItem" @add-product="addProduct" @edit-product="editProduct"></ProductModal> -->
+  <!-- <DelModal ref="delProductModal" :temp="editItem" @del="delProduct"></DelModal> -->
+  <!-- <PaginationCpmponent
     :pages="pages"
     @get-data="getProducts"
   ></PaginationCpmponent> -->

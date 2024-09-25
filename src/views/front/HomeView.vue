@@ -5,8 +5,8 @@ import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const store = useLoginStore();
-const { isloading }= storeToRefs(store);
-const { checkLogIn } =store;
+const { isloading } = storeToRefs(store);
+const { checkLogIn } = store;
 
 const handleCheckLogIn = async () => {
   const success = await checkLogIn();
