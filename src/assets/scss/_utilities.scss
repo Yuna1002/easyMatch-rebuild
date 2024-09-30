@@ -1,5 +1,6 @@
-.btn-outline-primary{
-  &:hover{
+.btn-outline-primary,
+.btn-outline-light-100 {
+  &:hover {
     color: #fff;
   }
 }

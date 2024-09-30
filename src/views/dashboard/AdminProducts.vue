@@ -16,6 +16,17 @@ const getProducts = async () => {
     console.log('api', err);
   }
 };
+//新增產品
+const addProduct = async (data) => {
+  try {
+    const res = await axios.post(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product`, { data });
+    alert(res.data.message);
+    modal.value.hide();
+    getProducts();
+  } catch (err) {
+    console.log(err.response.data.message);
+  }
+};
 const openModal = () => {
   modal.value.show();
 };
@@ -65,7 +76,7 @@ onMounted(() => {
       </tr>
     </tbody>
   </table>
-  <productModal ref="modal"></productModal>
+  <productModal ref="modal" :add-product="addProduct"></productModal>
   <!-- <ProductModal ref="productModal" :is-new="isNew" :edit-item="editItem" @add-product="addProduct" @edit-product="editProduct"></ProductModal> -->
   <!-- <DelModal ref="delProductModal" :temp="editItem" @del="delProduct"></DelModal> -->
   <!-- <PaginationCpmponent
