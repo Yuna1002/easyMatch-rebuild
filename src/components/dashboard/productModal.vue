@@ -11,7 +11,7 @@ const props = defineProps({
   }
 });
 
-const tempProduct = defineModel();
+// const tempProduct = defineModel();
 
 const show = () => {
   myModal.value.show();
@@ -44,7 +44,7 @@ defineExpose({
         <slot></slot>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-light-100" data-bs-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary text-white" @click="addProduct(tempProduct)">確認</button>
+          <button type="button" class="btn btn-primary text-white" @click="addProduct">確認</button>
           <!-- <button type="button" class="btn btn-primary" v-if="isNew" @click="$emit('addProduct', tempProduct)">確認</button>
           <button type="button" class="btn btn-primary" v-else @click="$emit('editProduct', tempProduct.id, tempProduct)">確認</button> -->
         </div>

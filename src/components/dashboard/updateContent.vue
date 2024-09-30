@@ -1,6 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-const tempProduct = defineModel();
+// const tempProduct = defineModel();
+const tempProduct = ref({});
+defineExpose({
+  tempProduct
+});
 </script>
 <template>
   <div class="modal-body">

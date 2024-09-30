@@ -6,9 +6,10 @@ import updateContent from '@/components/dashboard/updateContent.vue';
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 const products = ref([]);
-const tempProduct = ref({});
+// const tempProduct = ref({});
 const updateModal = ref(null);
 const delModal = ref(null);
+const tempProduct = ref(null);
 
 //取得所有產品
 const getProducts = async () => {
@@ -20,7 +21,9 @@ const getProducts = async () => {
   }
 };
 //新增產品
-const addProduct = async (data) => {
+const addProduct = async () => {
+  console.log('資料', tempProduct.value.tempProduct);
+  const data = tempProduct.value.tempProduct;
   try {
     const res = await axios.post(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product`, { data });
     alert(res.data.message);
@@ -92,7 +95,7 @@ onMounted(() => {
       </tr>
     </tbody>
   </table>
-  <productModal ref="updateModal" :add-product="addProduct" v-model="tempProduct"><updateContent v-model="tempProduct" /></productModal>
+  <productModal ref="updateModal" :add-product="addProduct"><updateContent ref="tempProduct" /></productModal>
   <productModal ref="delModal"> 這是刪除modal </productModal>
   <!-- <ProductModal ref="productModal" :is-new="isNew" :edit-item="editItem" @add-product="addProduct" @edit-product="editProduct"></ProductModal> -->
   <!-- <DelModal ref="delProductModal" :temp="editItem" @del="delProduct"></DelModal> -->
