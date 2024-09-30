@@ -2,10 +2,13 @@
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import productModal from '@/components/dashboard/productModal.vue';
+import updateContent from '@/components/dashboard/updateContent.vue';
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 const products = ref([]);
-const modal = ref(null);
+const tempProduct = ref({});
+const updateModal = ref(null);
+const delModal = ref(null);
 
 //取得所有產品
 const getProducts = async () => {
@@ -21,14 +24,27 @@ const addProduct = async (data) => {
   try {
     const res = await axios.post(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product`, { data });
     alert(res.data.message);
-    modal.value.hide();
+    updateModal.value.hide();
     getProducts();
   } catch (err) {
     console.log(err.response.data.message);
   }
 };
-const openModal = () => {
-  modal.value.show();
+//刪除產品
+const delProduct = async (id) => {
+  try {
+    const res = await axios.delete(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product/${id}`);
+  } catch (error) {
+    console.log(err.response.data.message);
+  }
+};
+
+const openModal = (type) => {
+  if (type === 'add') {
+    updateModal.value.show();
+  } else if (type === 'del') {
+    delModal.value.show();
+  }
 };
 
 onMounted(() => {
@@ -38,7 +54,7 @@ onMounted(() => {
 
 <template>
   <div class="text-end mt-4">
-    <button class="btn btn-primary text-white" @click="openModal">建立新的產品</button>
+    <button class="btn btn-primary text-white" @click="openModal('add')">建立新的產品</button>
   </div>
   <table class="table mt-4">
     <thead>
@@ -67,7 +83,7 @@ onMounted(() => {
               <!-- @click="openModal('edit', product)" -->
               編輯
             </button>
-            <button type="button" class="btn btn-outline-danger btn-sm">
+            <button type="button" class="btn btn-outline-danger btn-sm" @click="openModal('del')">
               <!-- @click="openModal('del', product)" -->
               刪除
             </button>
@@ -76,7 +92,8 @@ onMounted(() => {
       </tr>
     </tbody>
   </table>
-  <productModal ref="modal" :add-product="addProduct"></productModal>
+  <productModal ref="updateModal" :add-product="addProduct" v-model="tempProduct"><updateContent v-model="tempProduct" /></productModal>
+  <productModal ref="delModal"> 這是刪除modal </productModal>
   <!-- <ProductModal ref="productModal" :is-new="isNew" :edit-item="editItem" @add-product="addProduct" @edit-product="editProduct"></ProductModal> -->
   <!-- <DelModal ref="delProductModal" :temp="editItem" @del="delProduct"></DelModal> -->
   <!-- <PaginationCpmponent
