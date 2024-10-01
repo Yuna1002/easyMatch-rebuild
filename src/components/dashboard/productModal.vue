@@ -5,13 +5,18 @@ import { Modal } from 'bootstrap';
 const modal = ref(null);
 const myModal = ref(null);
 
-const props = defineProps({
+defineProps({
+  typeModel: {
+    type: String,
+    default: 'add'
+  },
   addProduct: {
+    type: Function
+  },
+  delProduct: {
     type: Function
   }
 });
-
-// const tempProduct = defineModel();
 
 const show = () => {
   myModal.value.show();
@@ -34,9 +39,10 @@ defineExpose({
   <div ref="modal" id="productModal" class="modal fade" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content border-0">
-        <div class="modal-header bg-dark text-white">
+        <div class="modal-header text-white" :class="{ 'bg-danger': typeModel === 'del', 'bg-dark': typeModel === 'add' }">
           <h5 id="productModalLabel" class="modal-title">
-            <span>新增產品</span>
+            <span v-if="typeModel === 'add'">新增產品</span>
+            <span v-if="typeModel === 'del'">刪除產品</span>
           </h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -44,8 +50,9 @@ defineExpose({
         <slot></slot>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-light-100" data-bs-dismiss="modal">取消</button>
-          <button type="button" class="btn btn-primary text-white" @click="addProduct">確認</button>
-          <!-- <button type="button" class="btn btn-primary" v-if="isNew" @click="$emit('addProduct', tempProduct)">確認</button>
+          <button v-if="typeModel === 'add'" type="button" class="btn btn-primary text-white" @click="addProduct">確認</button>
+          <button v-if="typeModel === 'del'" type="button" class="btn btn-danger text-white" @click="delProduct">確認</button>
+          <!-- 
           <button type="button" class="btn btn-primary" v-else @click="$emit('editProduct', tempProduct.id, tempProduct)">確認</button> -->
         </div>
       </div>

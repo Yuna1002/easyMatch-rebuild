@@ -6,10 +6,12 @@ import updateContent from '@/components/dashboard/updateContent.vue';
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 const products = ref([]);
-// const tempProduct = ref({});
+const typeModel = ref('');
+const tempProduct = ref({});
+
 const updateModal = ref(null);
 const delModal = ref(null);
-const tempProduct = ref(null);
+const contentProduct = ref(null);
 
 //取得所有產品
 const getProducts = async () => {
@@ -22,8 +24,8 @@ const getProducts = async () => {
 };
 //新增產品
 const addProduct = async () => {
-  console.log('資料', tempProduct.value.tempProduct);
-  const data = tempProduct.value.tempProduct;
+  //console.log('取出子層資料', contentProduct.value.tempProduct);
+  const data = contentProduct.value.tempProduct;
   try {
     const res = await axios.post(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product`, { data });
     alert(res.data.message);
@@ -34,18 +36,26 @@ const addProduct = async () => {
   }
 };
 //刪除產品
-const delProduct = async (id) => {
+const delProduct = async () => {
+  //console.log('刪除單筆資料', tempProduct.value);
+  const id = tempProduct.value.id;
   try {
     const res = await axios.delete(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/product/${id}`);
-  } catch (error) {
+    alert(res.data.message);
+    delModal.value.hide();
+    getProducts();
+  } catch (err) {
     console.log(err.response.data.message);
   }
 };
 
-const openModal = (type) => {
+const openModal = (type, product) => {
   if (type === 'add') {
+    typeModel.value = type;
     updateModal.value.show();
   } else if (type === 'del') {
+    typeModel.value = type;
+    tempProduct.value = product;
     delModal.value.show();
   }
 };
@@ -86,19 +96,21 @@ onMounted(() => {
               <!-- @click="openModal('edit', product)" -->
               編輯
             </button>
-            <button type="button" class="btn btn-outline-danger btn-sm" @click="openModal('del')">
-              <!-- @click="openModal('del', product)" -->
-              刪除
-            </button>
+            <button type="button" class="btn btn-outline-danger btn-sm" @click="openModal('del', product)">刪除</button>
           </div>
         </td>
       </tr>
     </tbody>
   </table>
-  <productModal ref="updateModal" :add-product="addProduct"><updateContent ref="tempProduct" /></productModal>
-  <productModal ref="delModal"> 這是刪除modal </productModal>
+  <productModal ref="updateModal" :type-model="typeModel" :add-product="addProduct"><updateContent ref="contentProduct" /></productModal>
+  <productModal ref="delModal" :type-model="typeModel" :del-product="delProduct">
+    <div class="modal-body">
+      確定刪除
+      <strong class="text-danger">{{ tempProduct.title }}</strong>
+      商品(刪除後將無法恢復)。
+    </div>
+  </productModal>
   <!-- <ProductModal ref="productModal" :is-new="isNew" :edit-item="editItem" @add-product="addProduct" @edit-product="editProduct"></ProductModal> -->
-  <!-- <DelModal ref="delProductModal" :temp="editItem" @del="delProduct"></DelModal> -->
   <!-- <PaginationCpmponent
     :pages="pages"
     @get-data="getProducts"
