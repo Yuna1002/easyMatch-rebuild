@@ -1,7 +1,13 @@
 <script setup>
-import { ref } from 'vue';
-// const tempProduct = defineModel();
+import { inject, ref, watch } from 'vue';
+const editProduct = inject('editProduct');
 const tempProduct = ref({});
+
+watch(editProduct, (newVal) => {
+  //tempProduct.value=newVal記憶體位址相同，會改到外層資料
+  tempProduct.value = { ...newVal };
+});
+
 defineExpose({
   tempProduct
 });
