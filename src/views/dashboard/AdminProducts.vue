@@ -3,11 +3,13 @@ import { ref, onMounted, provide } from 'vue';
 import axios from 'axios';
 import productModal from '@/components/dashboard/productModal.vue';
 import updateContent from '@/components/dashboard/updateContent.vue';
+import ProductsPagination from '@/components/dashboard/ProductsPagination.vue';
 const { VITE_APP_URL, VITE_APP_PATH } = import.meta.env;
 
 const products = ref([]);
-const typeModel = ref('');
+const typeModal = ref('');
 const tempProduct = ref({});
+const pages = ref({});
 provide('editProduct', tempProduct);
 
 const updateModal = ref(null);
@@ -15,10 +17,12 @@ const delModal = ref(null);
 const contentProduct = ref(null);
 
 //取得所有產品
-const getProducts = async () => {
+const getProducts = async (page = 1) => {
   try {
-    const res = await axios.get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/products`);
+    const res = await axios.get(`${VITE_APP_URL}/api/${VITE_APP_PATH}/admin/products/?page=${page}`);
+    //console.log('all', res.data);
     products.value = res.data.products;
+    pages.value = res.data.pagination;
   } catch (err) {
     console.log('api', err);
   }
@@ -36,6 +40,7 @@ const addProduct = async () => {
     console.log(err.response.data.message);
   }
 };
+//編輯產品
 const editProduct = async () => {
   //console.log('外層temp', tempProduct.value);
   //console.log('取出子層資料', contentProduct.value.tempProduct);
@@ -66,15 +71,15 @@ const delProduct = async () => {
 
 const openModal = (type, product) => {
   if (type === 'add') {
-    typeModel.value = type;
+    typeModal.value = type;
     tempProduct.value = {};
     updateModal.value.show();
   } else if (type === 'edit') {
-    typeModel.value = type;
+    typeModal.value = type;
     tempProduct.value = product;
     updateModal.value.show();
   } else {
-    typeModel.value = type;
+    typeModal.value = type;
     tempProduct.value = product;
     delModal.value.show();
   }
@@ -119,19 +124,15 @@ onMounted(() => {
       </tr>
     </tbody>
   </table>
-  <productModal ref="updateModal" :type-model="typeModel" :add-product="addProduct" :edit-product="editProduct"
+  <productModal ref="updateModal" :type-modal="typeModal" :add-product="addProduct" :edit-product="editProduct"
     ><updateContent ref="contentProduct"
   /></productModal>
-  <productModal ref="delModal" :type-model="typeModel" :del-product="delProduct">
+  <productModal ref="delModal" :type-modal="typeModal" :del-product="delProduct">
     <div class="modal-body">
       確定刪除
       <strong class="text-danger">{{ tempProduct.title }}</strong>
       商品(刪除後將無法恢復)。
     </div>
   </productModal>
-
-  <!-- <PaginationCpmponent
-    :pages="pages"
-    @get-data="getProducts"
-  ></PaginationCpmponent> -->
+  <ProductsPagination :get-products="getProducts" :pages="pages"></ProductsPagination>
 </template>
