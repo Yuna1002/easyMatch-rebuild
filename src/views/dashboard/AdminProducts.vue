@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, provide } from 'vue';
+import { ref, onMounted, provide, inject } from 'vue';
 import axios from 'axios';
 import productModal from '@/components/dashboard/productModal.vue';
 import updateContent from '@/components/dashboard/updateContent.vue';
@@ -15,6 +15,9 @@ provide('editProduct', tempProduct);
 const updateModal = ref(null);
 const delModal = ref(null);
 const contentProduct = ref(null);
+
+const $loading = inject('$loading');
+const productsContainer = ref(null);
 
 //取得所有產品
 const getProducts = async (page = 1) => {
@@ -87,6 +90,10 @@ const openModal = (type, product) => {
 
 onMounted(() => {
   getProducts();
+  const loader = $loading.show();
+  setTimeout(() => {
+    loader.hide();
+  }, 1500);
 });
 </script>
 
@@ -94,7 +101,7 @@ onMounted(() => {
   <div class="text-end mt-4">
     <button class="btn btn-primary text-white" @click="openModal('add')">建立新的產品</button>
   </div>
-  <table class="table mt-4">
+  <table class="table mt-4 vl-parent" ref="productsContainer">
     <thead>
       <tr>
         <th width="150">分類</th>
