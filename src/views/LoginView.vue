@@ -3,9 +3,9 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useLoginStore } from '@/stores/login.js';
 import { storeToRefs } from 'pinia';
-import gg from '@/plugins/validate.js';
+import validate from '@/plugins/validate.js';
 // 使用封装好的 schema
-const { schema } = gg;
+const { schema } = validate;
 
 const router = useRouter();
 const store = useLoginStore();
@@ -23,20 +23,6 @@ const handleLogin = async () => {
     router.push('/admin/products');
   }
 };
-
-// import * as yup from 'yup';
-// yup.setLocale({
-//   mixed: {
-//     required: '${label}必须输入'
-//   },
-//   string: {
-//     email: '邮箱格式错误'
-//   }
-// });
-// const schema = yup.object({
-//   email: yup.string().required().email(),
-//   password: yup.string().required().min(8)
-// });
 </script>
 
 <template>
